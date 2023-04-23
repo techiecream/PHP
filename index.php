@@ -2,7 +2,7 @@
 //Start session
 session_start();
 // Connect to the database
-$servername = " "; // server name
+$servername = "localhost"; // server name
 $username = " "; // server user name
 $password = " ";// server user name password
 $dbname = " ";// server user name
