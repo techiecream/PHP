@@ -1971,6 +1971,56 @@ shopsales.Date BETWEEN ? AND ? ";
     mysqli_stmt_close($stmt);
 }
 ?>
+<?php
+if (isset($_GET["spaos"])) {
+if (isset($_SESSION['ShopLogin']) && $_SESSION['Level'] == 4) {
+// SQL query to calculate the profit for each sale
+$sql = "SELECT 
+  ss.Item, 
+  SUM(ss.QtySold) AS `QtySold`, 
+  SUM(ss.cost) AS `costgot`,
+  (si.BulkPurchasePrice / si.BulkPurchaseQty) AS `Buying Cost`, 
+  SUM(ss.QtySold * (si.Selling - (si.BulkPurchasePrice / si.BulkPurchaseQty))) AS `Profit`
+FROM 
+  shopsales ss 
+  JOIN shopitems si ON ss.Item = si.Item
+WHERE 
+  ss.Date BETWEEN '2023-03-15' AND '2023-04-14'
+GROUP BY 
+  ss.Item";
+  
+// execute the SQL query
+$result = mysqli_query($conn, $sql);
+
+// check if query execution was successful
+if (!$result) {
+  die("Query failed: " . mysqli_error($conn));
+}
+
+// display the results in an HTML table format
+
+
+	  
+echo "<form><table border='1'>
+        <tr>
+          <th>Item</th>
+          <th>QtySold</th>
+          <th>Buying Cost</th>
+          <th>Profit</th>
+        </tr>";
+
+while ($row = mysqli_fetch_assoc($result)) {
+  echo "<tr>
+          <td>" . $row['Item'] . "</td>
+          <td>" . $row['QtySold'] . "</td>
+          <td>" . number_format($row['Buying Cost']) . "</td>
+          <td>" . number_format($row['Profit']) . "</td>
+        </tr>";
+}
+echo "</table></form>";
+  }
+}
+?>
 <form name="sales" method="post" action="shop.php" autocomplete="off">
   <h1>ADD SALES RECORD</h1>
   
@@ -2003,12 +2053,14 @@ shopsales.Date BETWEEN ? AND ? ";
   }
   if (isset($_SESSION['ShopLogin']) && $_SESSION['Level'] == '4') {
     echo "
-  &nbsp;&nbsp;&nbsp;<a href='shop.php?tsearch'>SEARCH</a>
-  &nbsp;&nbsp;&nbsp;<a href='shop.php?utr'>UPDATE TRANSACTION</a>
-  &nbsp;&nbsp;&nbsp;<a href='shop.php?dextr'>EXTRACT DEBTOR</a>
-    &nbsp;&nbsp;&nbsp;<a href='shop.php?Nsexpense'>EXPENSE</a>
-	&nbsp;&nbsp;&nbsp;<a href='shop.php?Newshoi'>SHOP MANAGEMENT</a>
-    &nbsp;&nbsp;&nbsp;<a href='shop.php?vhst'>VIEW SUMMARY</a>";
+			&nbsp;&nbsp;&nbsp;<a href='shop.php?tsearch'>SEARCH</a>
+			&nbsp;&nbsp;&nbsp;<a href='shop.php?utr'>UPDATE TRANSACTION</a>
+			&nbsp;&nbsp;&nbsp;<a href='shop.php?dextr'>EXTRACT DEBTOR</a>
+			&nbsp;&nbsp;&nbsp;<a href='shop.php?Nsexpense'>EXPENSE</a>
+			&nbsp;&nbsp;&nbsp;<a href='shop.php?spaos'>PROFITABILITY CHECK</a>
+			&nbsp;&nbsp;&nbsp;<a href='shop.php?Newshoi'>SHOP MANAGEMENT</a>
+			&nbsp;&nbsp;&nbsp;<a href='shop.php?vhst'>VIEW SUMMARY</a>";
+			
 	
   }
   else{

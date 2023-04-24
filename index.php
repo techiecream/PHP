@@ -129,7 +129,6 @@ if (isset($_SESSION['ShopLogin'])) {
 	echo '
 		<nav class="navbar">
 		|&nbsp; &nbsp;<a href="shop.php">HOME</a>	<br/>
-		|&nbsp; &nbsp;<a href="?Newshoi"> SHOP MANAGEMENT</a>	<br/>
 
 		|&nbsp; &nbsp;<a href="logout.php">Logout</a>
 		</nav>';
