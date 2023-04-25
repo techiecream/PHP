@@ -1357,15 +1357,18 @@ echo '
 </tr>
 <tr>
 <td><select name="ticfnen" class="span10" required>
-<option value="">Select Item</option>';
+<option value="">Select Item</option>
+<option value="Airtime">Airtime</option>
+<option value="Boda">Boda</option>
+<option value="Drinks">Drinks / Food</option>
+<option value="Electricity">Electricity</option>
+<option value="Mobile Money">Mobile Money</option>
+<option value="Others">Others</option>
+<option value="Packaging">Packaging</option>
+<option value="Personal">Personal</option>
+<option value="Repairs">Repairs</option>
+<option value="Stock">Business Stock</option>
 
-$query = "SELECT Distinct Item FROM shopexpenses ORDER BY item ASC";
-$result = mysqli_query($conn, $query);
-while ($row = mysqli_fetch_array($result)) {
-    echo '<option value="' . $row['Item'] . '">' .$row['Item'].'</option>';
-}
-echo "";
-echo '
 </select></td>
 <td><input type="number" name="ticfeq" Placeholder="Expense Quantity" size="20" required></td>
 </tr>
@@ -2060,8 +2063,6 @@ echo "</table></form>";
 			&nbsp;&nbsp;&nbsp;<a href='shop.php?spaos'>PROFITABILITY CHECK</a>
 			&nbsp;&nbsp;&nbsp;<a href='shop.php?Newshoi'>SHOP MANAGEMENT</a>
 			&nbsp;&nbsp;&nbsp;<a href='shop.php?vhst'>VIEW SUMMARY</a>";
-			
-	
   }
   else{
     echo "";
