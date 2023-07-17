@@ -4,11 +4,10 @@
 <meta charset="utf-8">
 <meta name="description" content="">
 <meta name="keywords" content="">
-<meta name="author" content="">
-<meta name="version" content="2.0">
+<meta name="author" content="ROBINS BUREAU">
+<meta name="version" content="2.1.0">
 <link rel = "stylesheet" type= "text/css" href = "style.css" media= "screen"/>
 <script src="jquery.js"></script>
-<title>ROBINS STATIONERY AND SECRETARIAL BUREAU</title>
 
 <?php
 //Start session
@@ -515,82 +514,64 @@ $user = mysqli_fetch_assoc($result);
 	}
 }
 ?>
-
-<title>ROBINS STATIONERY AND SECRETARIAL BUREAU</title>	
+<title>MY SHOP</title>
 </head>
 <body>
 	<div id="header">
-		<h1>ROBINS STATIONERY AND SECRETARIAL BUREAU</h1>
-		<?php
+		<h1>MY BUSINESS</h1>
+<!-- Navigation link content goes here -->	
+<?php
 // Check if user is logged in
 if (isset($_SESSION['ShopLogin'])) {
 	// Check user level and display appropriate links 
-	//Level 1: 
+	//Level 1: Attendent
 	if ($_SESSION['Level'] == '1') {
 	echo '
 		<nav class="navbar">
 		|&nbsp; &nbsp;<a href="shop.php">HOME</a>	<br/>
-		
 		|&nbsp; &nbsp;<a href="logout.php">Logout</a>
 		</nav>';
 	} 
-	//Level 2:
+	//Level 2: Manager 
 	elseif ($_SESSION['Level'] == '2') {
 	echo '
 		<nav class="navbar">
-		|&nbsp; &nbsp;<a href="shop.php">HOME</a>	<br/>
-
-		|&nbsp; &nbsp;<a href="logout.php">Logout</a><br/>
+		|&nbsp; &nbsp;<a href="shop.php">HOME</a>	<br/>		
+		|&nbsp; &nbsp;<a href="?Newshoi"> SHOP MANAGEMENT</a>	<br/>
+		|&nbsp; &nbsp;<a href="logout.php">Logout</a><br/>		
+		&nbsp;&nbsp;&nbsp;<a href="shop.php?tsearch">SEARCH</a>
+		&nbsp;&nbsp;&nbsp;<a href="shop.php?utr">UPDATE TRANSACTION</a>
+		&nbsp;&nbsp;&nbsp;<a href="shop.php?dextr">EXTRACT DEBTOR</a>
+		&nbsp;&nbsp;&nbsp;<a href="shop.php?Nsexpense">EXPENSE</a>
+		&nbsp;&nbsp;&nbsp;<a href="shop.php?spaos">PROFITABILITY CHECK</a>
+		&nbsp;&nbsp;&nbsp;<a href="shop.php?Newshoi">SHOP MANAGEMENT</a>
+		&nbsp;&nbsp;&nbsp;<a href="shop.php?vhst">VIEW SUMMARY</a>";
 		</nav>';
 	}
 
-	//Level 3:   
-
+	//Level 3:  Administrator
 	elseif ($_SESSION['Level'] == '3') {
 	echo '
-		<nav class="navbar">
+			<nav class="navbar">
 		|&nbsp; &nbsp;<a href="shop.php">HOME</a>	<br/>
+|&nbsp; &nbsp;<a href="shop.php?Clientsa">SERVICE CENTRE</a>
 		|&nbsp; &nbsp;<a href="logout.php">Logout</a>
 		</nav>';
-	}
 
-	//Levels 4: 
-
-	elseif ($_SESSION['Level'] == '4') {
-	echo '
-		<nav class="navbar">
-		|&nbsp; &nbsp;<a href="shop.php">HOME</a>	<br/>
-		|&nbsp; &nbsp;<a href="?Newshoi"> SHOP MANAGEMENT</a>	<br/>
-
-		|&nbsp; &nbsp;<a href="logout.php">Logout</a>
-		</nav>';
-	}	
-
-	//Alpha Level also known as level 5
-
-
-	elseif ($_SESSION['Level'] == '5') {
-	echo '
-		<nav class="navbar">
-		|&nbsp; &nbsp;<a href="shop.php">HOME</a>	<br/>
-		|&nbsp; &nbsp;<a href="logout.php">Logout</a>
-		</nav>';
 	}
 }
- 
+
+elseif (isset($_SESSION['userLogin'])) {
+	//display appropriate links 
+	echo '';
+	} 
 else{
-echo '
-<nav class="navbar">
-<a href="index.php">Home</a>
-
-</nav>';
+echo '';
 }
-
-
-?>
-	</div>
-	<div id="main">
-		<div id="content">
+ ?>
+</div>
+<div id="main">
+<div id="content">
 			<!-- Main content goes here -->
 			<!-- Errors or any other errors-->
   		<?php if(isset($smsg)) { ?>
@@ -599,7 +580,7 @@ echo '
 				<p class="error"><?php echo $msg; ?></p>
 				<?php } ?>			
 <?php
-if (isset($_SESSION['ShopLogin']) && $_SESSION['ShopLogin'] == true && $_SESSION['Level'] == '4') {
+if (isset($_SESSION['ShopLogin']) && $_SESSION['ShopLogin'] == true && $_SESSION['Level'] == '3') {
 	echo "
 	<form>
 	<table>
@@ -661,11 +642,11 @@ else{
 	echo "";
 }
 
-if (isset($_SESSION['ShopLogin']) && $_SESSION['ShopLogin'] == true && ( !($_SESSION['Level'] === 4) ) ) 
+if (isset($_SESSION['ShopLogin']) && $_SESSION['ShopLogin'] == true && ( !($_SESSION['Level'] === 3) ) ) 
 {
 
 	echo "
-		<form>
+	<form>
 	<table>
 	<tr><td>
 	Hi, 
@@ -679,29 +660,27 @@ if (isset($_SESSION['ShopLogin']) && $_SESSION['ShopLogin'] == true && ( !($_SES
 ?>
 <?php
 	//user details
-if (isset($_GET["myprofile"]))
-{
-echo '
-<form>
-<table >
-<tr><th>USER PROFILE</th></tr>';
-$cc=$_SESSION['SAdmin']; # User
-$query="SELECT SUM(cost) AS Madea FROM shopsales where Handler='$cc'";
-$result= mysqli_query($conn,$query);
-$row = mysqli_fetch_assoc($result); 
-$mssum = $row['Madea'];
-$query="select * from shopusers where username ='$cc'";
-$result=mysqli_query($conn, $query);
-while ($row = mysqli_fetch_array($result)) {
-	print "<tr><td> Since: ".$row[10]."</td></tr>";
-	print "<tr><td> Employee ID: ".$row[9]."</td></tr>";
-	print "<tr><td> User Name: ".$row[1]."</td></tr>";
-	print "<tr><td> Email Address: ".$row[2]."</td></tr>";
-	print "<tr><td> Phone Number: ".$row[5]."</td></tr>";
+if (isset($_GET["myprofile"])){
+	echo '
+	<form><table >
+	<tr><th>USER PROFILE</th></tr>';
+	$cc=$_SESSION['SAdmin']; # User
+	$query="SELECT SUM(cost) AS Madea FROM shopsales where Handler='$cc'";
+	$result= mysqli_query($conn,$query);
+	$row = mysqli_fetch_assoc($result); 
+	$mssum = $row['Madea'];
+	$query="select * from shopusers where username ='$cc'";
+	$result=mysqli_query($conn, $query);
+	while ($row = mysqli_fetch_array($result)) {
+		print "<tr><td> Since: ".$row[10]."</td></tr>";
+		print "<tr><td> Employee ID: ".$row[9]."</td></tr>";
+		print "<tr><td> User Name: ".$row[1]."</td></tr>";
+		print "<tr><td> Email Address: ".$row[2]."</td></tr>";
+		print "<tr><td> Phone Number: ".$row[5]."</td></tr>";
 		print "<tr><td> CLOR: ".$row[6]."</td></tr>";
-	if ($_SESSION['Level'] < 5) {
-		print "<tr><td> Rating: ".round((($mssum*0.05)/12),-2)."</td></tr>";
-		}
+		if ($_SESSION['Level'] === 3) {
+			print "<tr><td> Rating: ".round((($mssum*0.05)/12),-2)."</td></tr>";
+			}
 	print "<tr><td align='center'> <a href='shop.php?pssnuser'>CHANGE PASSWORD</a>";
 	print "</td></tr>";
 }		
@@ -716,7 +695,7 @@ echo'
 <table> 
 <tr><th><b>YOUR TO DO LIST FOR TODAY</b></th></tr>';
 // Check that the session variable 'ShopLogin' is set
-if (isset($_SESSION['ShopLogin']) && $_SESSION['ShopLogin'] == true && $_SESSION['Level'] == '4') {
+if (isset($_SESSION['ShopLogin']) && $_SESSION['ShopLogin'] == true && $_SESSION['Level'] == '3') {
   // Sanitize user input
   $sutor = mysqli_real_escape_string($conn, $_SESSION['SAdmin']);
   // Display list of recurring tasks for the day
@@ -830,14 +809,7 @@ echo "";
 }
 ?>
 
-
-
-
-
-
 <?php
-
-
 //view summary of sales
 if (isset($_GET["vhst"]))
 {
@@ -921,7 +893,7 @@ if (isset($_GET["loaction"]))
 
 <select name="ticfiot" class="span10" required>
 <option value="">Incharge</option>';
-$query="select * from shopusers where username!='Admin' and username!='Robin' order by id asc";
+$query="select * from shopusers where CLOR!='3' and CLOR!='2' order by id asc";
 $result=mysqli_query($conn,$query);
 while ($row = mysqli_fetch_array($result)) {
 	echo '<option value="'.$row[1].'">'.$row[1].'</option>';
@@ -999,7 +971,7 @@ while ($row = mysqli_fetch_array($result)) {
 		print "</table></form>";
 }
 
-if (isset($_SESSION['ShopLogin']) && $_SESSION['Level'] == '4') {
+if (isset($_SESSION['ShopLogin']) && $_SESSION['Level'] == '3') {
 //update profile
 if (isset($_GET["userchud"]))
 {
@@ -1032,7 +1004,7 @@ else{
 ?>
 <?php
 if (isset($_GET["Newshoi"])){
-if (isset($_SESSION['ShopLogin']) && $_SESSION['Level'] == '4') {
+if (isset($_SESSION['ShopLogin']) && $_SESSION['Level'] == '3') {
 echo '
 <form name="shop" method="post" action="shop.php">
 <h1>NEW SHOP ITEM RECORD</h1>
@@ -1076,11 +1048,6 @@ if ($result && mysqli_num_rows($result) > 0) {
 }
 }
 ?>
-
-
-
-
-
 
 <?php
 if (isset($_GET["shsm"]))
@@ -1153,7 +1120,6 @@ while ($row = mysqli_fetch_array($result)) {
 	print "<input type='hidden' name='shspc' value='shspce'>";
 	print "<input type='submit' value='UPDATE DETAILS'>";
 	print "<a href='shop.php?shsm'>STOCK MANAGEMENT</a>";	
-
 		}
 	print "</form>";
 }
